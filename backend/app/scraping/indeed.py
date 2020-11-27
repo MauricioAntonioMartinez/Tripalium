@@ -1,7 +1,7 @@
 from urllib.request import urlopen, Request
 from bs4 import BeautifulSoup
-from util import Util
-from scraper import Scraper
+from .util import Util
+from .scraper import Scraper
 
 
 class IndeedScrape(Scraper):
@@ -10,8 +10,9 @@ class IndeedScrape(Scraper):
 
     def scrape_description(self, job):
         if not job["link"]:
-            return
-        return self.scrape(job["link"], {"id": "jobDescriptionText"})
+            return "Link not found"
+        return str(self.scrape(job["link"], {"id": "jobDescriptionText",
+                                             "class": "jobsearch-jobDescriptionText"}))
 
     def scrape_jobs(self):
         for job in self.data:
@@ -40,7 +41,7 @@ class IndeedScrape(Scraper):
                                }
             self.jobs.append(job_description)
 
-        # self.scrape_jobs_descriptions()
+        self.scrape_jobs_descriptions()
 
         return self.jobs
 

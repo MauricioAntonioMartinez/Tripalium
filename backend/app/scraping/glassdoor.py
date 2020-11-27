@@ -1,7 +1,7 @@
 from urllib.request import urlopen, Request
 from bs4 import BeautifulSoup
-from util import Util
-from scraper import Scraper
+from .util import Util
+from .scraper import Scraper
 import concurrent.futures
 
 
@@ -11,7 +11,9 @@ class GlassdorScrape(Scraper):
     with_headers = True
 
     def scrape_description(self, job):
-        return self.scrape(job["link"], {"id": "JobDescriptionContainer"})
+        content = self.scrape(
+            job["link"], {"id": "JobDescriptionContainer"}, "div")
+        return str(content)
 
     def scrape_jobs(self):
         for job in self.data:

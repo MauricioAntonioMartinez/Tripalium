@@ -1,6 +1,6 @@
 
-from util import Util
-from scraper import Scraper
+from .util import Util
+from .scraper import Scraper
 
 
 class CareerBuilderScrepe(Scraper):
@@ -10,7 +10,10 @@ class CareerBuilderScrepe(Scraper):
 
     def scrape_description(self, job):
         job_desc = self.scrape(job["link"],
-                               {"id": "jdp_description"})
+                               {"class": "data-display-container"})
+        if len(job_desc) == 0:
+
+            return None
         desc = job_desc[0].find("p")
         req = job_desc[0].find(True, {"class": "bloc"})
         # or (tag.name == "div" and tag.get("class") == "bloc")]

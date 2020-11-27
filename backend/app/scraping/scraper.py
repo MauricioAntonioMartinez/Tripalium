@@ -1,6 +1,6 @@
 from urllib.request import urlopen, Request
 from bs4 import BeautifulSoup
-from util import Util
+from .util import Util
 import concurrent.futures
 import abc
 
@@ -35,14 +35,21 @@ class Scraper(metaclass=abc.ABCMeta):
     def scrape_jobs(self):
         pass
 
-    def scrape(self, url, args):
-        headers = {
-            "headers": {
-                'User-Agent': 'Mozilla/5.0'}
-        }
-        headers = headers if self.with_headers else {}
-        res = Request(url=url, **headers)
-        html = urlopen(res).read()
-        bs = BeautifulSoup(html, 'html.parser')
-
-        return bs.find_all(True, args)
+    def scrape(self, url, args, tag=True):
+        try:
+            headers = {
+                "headers": {
+                    "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.67 Safari/537.36",
+                    "User-Agent":
+                    "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.3"
+                }
+            }
+            headers = headers if self.with_headers else {}
+            res = Request(url=url, **headers)
+            html = urlopen(res).read()
+            bs = BeautifulSoup(html, 'html.parser')
+            return bs.find_all(True if type(tag) == bool else tag, args)
+        except Exception as e:
+            print("REQUEST FAILED")
+            print(e)
+            return []

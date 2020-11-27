@@ -12,11 +12,11 @@ RUN pip3 install -r requirements.txt
 
 COPY /app .
 
-EXPOSE 4000
+EXPOSE 5000
 
 
 ENTRYPOINT [ "python3" ]
 
-CMD ["scraping/careerbuilder.py"]
+CMD ["main.py"]
 
 
