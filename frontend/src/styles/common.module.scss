@@ -1,10 +1,13 @@
+@import "./layout.module.scss";
+
 .container {
+  margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
   flex: 1;
   justify-content: center;
   align-items: center;
-  margin: auto;
+  align-self: center;
 }
 .branch {
   font-style: italic;
@@ -19,12 +22,39 @@
 }
 
 .searchButton {
-  padding: 0.3rem 2rem;
+  padding: 0.5rem 2rem;
   font-weight: bold;
   border-radius: 6px;
+  background-color: rgb(0, 0, 0);
+  color: white;
+  border: 1px solid transparent;
 
   &:hover {
-    box-shadow: 2px 1px 2px rgb(177, 174, 174);
+    cursor: pointer;
     color: rgba(0, 0, 0, 0.85);
+    background-color: white;
+    border: 1px solid black;
+  }
+}
+
+.recent_searches {
+  ul {
+    padding: 1rem;
+  }
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    width: 24rem;
+    list-style: none;
+    color: rgb(255, 255, 255);
+    border: 1px solid rgb(0, 0, 0);
+    padding: 0.2rem 0.5rem;
+    text-align: start;
+  }
+
+  li:hover {
+    cursor: pointer;
+    color: rgb(0, 0, 0);
   }
 }

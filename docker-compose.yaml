@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  mongo:
+    image: mongo
+    volumes:
+      - mongo-scrape-data:/data/db
+    env_file:
+      - ./env/.database.env
+  flask:
+    build: ./backend
+    env_file:
+      - ./env/.backend.env
+    volumes:
+      - ./backend/app:/app
+    depends_on:
+      - mongo
+    ports:
+      - "5000:5000"
+  next:
+    build: ./frontend
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - flask
+
+volumes:
+  mongo-scrape-data:

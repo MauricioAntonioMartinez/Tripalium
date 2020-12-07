@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from "react";
-import st from "./layout.module.scss";
+import st from "../styles/layout.module.scss";
 interface Props {}
 
 export const Layout: React.FC<PropsWithChildren<Props>> = ({ children }) => {
