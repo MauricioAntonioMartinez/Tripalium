@@ -1,4 +1,4 @@
-$main-color: red;
+$main-color: #ff0000c2;
 $bg-color: #c5c5c59a;
 
 .layout {
@@ -10,7 +10,7 @@ $bg-color: #c5c5c59a;
 .mainContent {
   margin-top: 1rem;
   padding: 1rem;
-  background-color: #ff0000c2;
+  background-color: $main-color;
   display: flex;
   width: 100%;
   justify-content: center;

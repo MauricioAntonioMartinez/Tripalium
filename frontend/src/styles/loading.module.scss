@@ -1,0 +1,74 @@
+$bg-color: #a8a8a881;
+$main-color: #ffffff;
+
+.container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+
+  h1 {
+    margin-bottom: 1rem;
+    transition: all 1s ease-out;
+  }
+}
+
+.opacityOn {
+  opacity: 1;
+}
+.opacityOff {
+  opacity: 0;
+}
+
+.loading {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: $main-color;
+  color: $main-color;
+  animation: dotFlashing 1s infinite linear alternate;
+  animation-delay: 0.5s;
+}
+
+.loading::before,
+.loading::after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  top: 0;
+}
+
+.loading::before {
+  left: -15px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: $main-color;
+  color: $main-color;
+  animation: dotFlashing 1s infinite alternate;
+  animation-delay: 0s;
+}
+
+.loading::after {
+  left: 15px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: $main-color;
+  color: $main-color;
+  animation: dotFlashing 1s infinite alternate;
+  animation-delay: 1s;
+}
+
+@keyframes dotFlashing {
+  0% {
+    background-color: $main-color;
+  }
+  50%,
+  100% {
+    background-color: $bg-color;
+  }
+}

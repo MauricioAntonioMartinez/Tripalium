@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import styleLoading from "../styles/loading.module.scss";
 import { Tags } from "../components/Tags";
 import { Search } from "../components/Search";
 import styles from "../styles/common.module.scss";
@@ -13,7 +14,10 @@ interface Props {
 
 const index = (props: Props) => {
   const [tags, setTags] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [opacity, setOpacity] = useState(styleLoading.opacityOn);
   const addTagHandler = (tag: string) => setTags((tgs) => [...tgs, tag]);
+
   const removeTagHandler = (index: number) =>
     setTags((tags) => tags.filter((_, idx) => idx !== index));
   const searchHandler = async () => {
@@ -28,36 +32,56 @@ const index = (props: Props) => {
     console.log(res);
   };
 
-  console.log(props);
+  useEffect(() => {
+    let interval;
+    if (loading) {
+      interval = setInterval(() => {
+        setOpacity((op) =>
+          op === styleLoading.opacityOn
+            ? styleLoading.opacityOff
+            : styleLoading.opacityOn
+        );
+      }, 2000);
+    }
 
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       const res = await restApi.post("/");
-  //       console.log(res.data);
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   })();
-  // }, []);
+    return () => clearInterval(interval);
+  }, [loading]);
+
+  console.log(props);
 
   return (
     <div className={styles.container}>
       <div className={styles.container}>
         <h1 className={styles.branch}>Tripalium</h1>
-        <Search addTagHandler={addTagHandler} />
+        <Search addTagHandler={addTagHandler} disabled={loading} />
       </div>
       <div className={layout.mainContent}>
         <Tags tags={tags} remove={removeTagHandler} />
         {tags.length > 3 && (
           <SearchButton onClick={searchHandler}>Give me luck</SearchButton>
         )}
-        {tags.length === 0 && <h1>Add tags to your search.</h1>}
+        {/* {tags.length === 0 && <h1>Add tags to your search.</h1>} */}
         {/* {tags.length <= 3 && (
           <RecentSearches
             recent_searches={props?.recent_searches.slice(0, 6)}
           />
         )} */}
+        {loading && (
+          <div className={styleLoading.container}>
+            <h1
+              className={
+                opacity === styleLoading.opacityOff
+                  ? styleLoading.opacityOn
+                  : styleLoading.opacityOff
+              }
+            >
+              Looking for your jobs.
+            </h1>
+            <h1 className={opacity}>This would take a few seconds.</h1>
+
+            <div className={styleLoading.loading}></div>
+          </div>
+        )}
       </div>
     </div>
   );
