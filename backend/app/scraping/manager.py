@@ -12,7 +12,7 @@ class ScraperManager():
         country = "mx"
         url_glassdor = f'https://www.glassdoor.com.{country}/Empleo/{query}-empleos-SRCH_KO0,6_KE7,16.htm'
         query = "+".join(keywords)
-        url_indeed = f"https://www.indeed.com/q-react-nodejs-jobs.html?vjk=6b819f3191c070f1"
+        url_indeed = f"https://www.indeed.com/q-{query}-jobs.html?vjk=6b819f3191c070f1"
         location = "Mexico"
         url_career = f"https://www.careerbuilder.com/jobs?utf8=%E2%9C%93&keywords={query}&location={location}"
 
@@ -22,14 +22,14 @@ class ScraperManager():
 
     def main_scraping(self):
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            res_1 = executor.submit(self.indeed.scrape_jobs)
+            # res_1 = executor.submit(self.indeed.scrape_jobs)
             res_2 = executor.submit(self.glassdoor.scrape_jobs)
             res_3 = executor.submit(self.career_builder.scrape_jobs)
 
-            return res_1.result() + res_2.result() + res_3.result()
+            return  res_2.result() + res_3.result()
 
 
-if __name__ == "__main__":
-    keys = ["nodejs", "reactjs"]
-    sc = ScraperManager(keys)
-    jobs = sc.main_scraping()
+# if __name__ == "__main__":
+#     keys = ["nodejs", "reactjs"]
+#     sc = ScraperManager(keys)
+#     jobs = sc.main_scraping()

@@ -3,9 +3,13 @@ import styles from "../styles/common.module.scss";
 
 interface Props {
   recent_searches?: string[];
+  shouldNotDisplay:boolean;
 }
 
-export const RecentSearches = ({ recent_searches }: Props) => {
+export const RecentSearches = ({shouldNotDisplay, recent_searches }: Props) => {
+
+  if(shouldNotDisplay) return null;
+
   return (
     <div className={styles.recent_searches}>
       <h1>Recent Searches</h1>

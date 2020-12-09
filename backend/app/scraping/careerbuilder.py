@@ -48,10 +48,10 @@ class CareerBuilderScrepe(Scraper):
         return self.jobs
 
 
-if __name__ == "__main__":
-    location = "Mexico"
-    keys = ["nodejs"]
-    query = "+".join(keys)
-    url = f"https://www.careerbuilder.com/jobs?utf8=%E2%9C%93&keywords={query}&location={location}"
-    jobs = CareerBuilderScrepe(url).scrape_jobs()
-    print(jobs)
+# if __name__ == "__main__":
+#     location = "Mexico"
+#     keys = ["nodejs"]
+#     query = "+".join(keys)
+#     url = f"https://www.careerbuilder.com/jobs?utf8=%E2%9C%93&keywords={query}&location={location}"
+#     jobs = CareerBuilderScrepe(url).scrape_jobs()
+#     print(jobs)

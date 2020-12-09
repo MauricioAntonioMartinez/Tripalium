@@ -37,10 +37,10 @@ class GlassdorScrape(Scraper):
         return self.jobs
 
 
-if __name__ == '__main__':
-    keys = ["nodejs", "reactjs"]
-    query = "-".join(keys)
-    country = "mx"
-    url = f'https://www.glassdoor.com.{country}/Empleo/{query}-empleos-SRCH_KO0,6_KE7,16.htm'
-    jobs = GlassdorScrape(url).scrape_jobs()
-    print(jobs)
+# if __name__ == '__main__':
+#     keys = ["nodejs", "reactjs"]
+#     query = "-".join(keys)
+#     country = "mx"
+#     url = f'https://www.glassdoor.com.{country}/Empleo/{query}-empleos-SRCH_KO0,6_KE7,16.htm'
+#     jobs = GlassdorScrape(url).scrape_jobs()
+#     print(jobs)

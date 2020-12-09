@@ -3,10 +3,10 @@ import { NextPageContext } from "next";
 
 let instance: AxiosInstance;
 
-export const buildClient = (ctx?: NextPageContext) => {
+export const buildClient = (req?: NextPageContext["req"]) => {
   instance = axios.create({
-    baseURL: ctx?.req ? "http://flask:5000" : "http://localhost:5000",
-    headers: ctx?.req?.headers,
+    baseURL: req ? "http://flask:5000" : "http://localhost:5000",
+    headers: req?.headers,
     withCredentials: true,
   });
   return instance;

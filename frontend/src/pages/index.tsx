@@ -4,50 +4,31 @@ import { Tags } from "../components/Tags";
 import { Search } from "../components/Search";
 import styles from "../styles/common.module.scss";
 import layout from "../styles/layout.module.scss";
+import { useRouter } from "next/router";
 import { SearchButton } from "../components/SearchButton";
 import { NextPageContext } from "next";
 import { buildClient } from "../api/client";
 import { RecentSearches } from "../components/RecentSearches";
+import { LoadingSearch } from "../components/LoadingSearch";
 interface Props {
   recent_searches: string[];
 }
 
-const index = (props: Props) => {
+const index = ({ recent_searches }: Props) => {
   const [tags, setTags] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [opacity, setOpacity] = useState(styleLoading.opacityOn);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const addTagHandler = (tag: string) => setTags((tgs) => [...tgs, tag]);
 
   const removeTagHandler = (index: number) =>
     setTags((tags) => tags.filter((_, idx) => idx !== index));
   const searchHandler = async () => {
-    const res = await buildClient()
-      .post("/", {
-        searches: tags,
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-
-    console.log(res);
+    setLoading(true);
+    router.push(`/results?keywords=${tags.join("+")}`, "/results");
   };
-
-  useEffect(() => {
-    let interval;
-    if (loading) {
-      interval = setInterval(() => {
-        setOpacity((op) =>
-          op === styleLoading.opacityOn
-            ? styleLoading.opacityOff
-            : styleLoading.opacityOn
-        );
-      }, 2000);
-    }
-
-    return () => clearInterval(interval);
-  }, [loading]);
-
-  console.log(props);
+  const cancelSearchHandler = () => {
+    setLoading(false);
+  };
 
   return (
     <div className={styles.container}>
@@ -55,40 +36,27 @@ const index = (props: Props) => {
         <h1 className={styles.branch}>Tripalium</h1>
         <Search addTagHandler={addTagHandler} disabled={loading} />
       </div>
-      <div className={layout.mainContent}>
+      <main className={layout.mainContent}>
         <Tags tags={tags} remove={removeTagHandler} />
-        {tags.length > 3 && (
+        {tags.length >= 2 && !loading && (
           <SearchButton onClick={searchHandler}>Give me luck</SearchButton>
         )}
-        {/* {tags.length === 0 && <h1>Add tags to your search.</h1>} */}
-        {/* {tags.length <= 3 && (
-          <RecentSearches
-            recent_searches={props?.recent_searches.slice(0, 6)}
-          />
-        )} */}
-        {loading && (
-          <div className={styleLoading.container}>
-            <h1
-              className={
-                opacity === styleLoading.opacityOff
-                  ? styleLoading.opacityOn
-                  : styleLoading.opacityOff
-              }
-            >
-              Looking for your jobs.
-            </h1>
-            <h1 className={opacity}>This would take a few seconds.</h1>
-
-            <div className={styleLoading.loading}></div>
-          </div>
-        )}
-      </div>
+        <LoadingSearch
+          cancel={cancelSearchHandler}
+          keywordsLength={tags.length + recent_searches.length}
+          loading={loading}
+        />
+        <RecentSearches
+          recent_searches={recent_searches}
+          shouldNotDisplay={tags.length === 0 && recent_searches.length === 0}
+        />
+      </main>
     </div>
   );
 };
 
 index.getInitialProps = async (ctx: NextPageContext) => {
-  const axios = buildClient(ctx);
+  const axios = buildClient(ctx.req);
   const res = await axios.get("http://flask:5000/", {
     headers: ctx.req.headers,
   });

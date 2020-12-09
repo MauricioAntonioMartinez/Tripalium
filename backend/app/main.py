@@ -2,6 +2,7 @@ from flask import Flask, request, json, Response, jsonify,session
 from pymongo import MongoClient
 import logging as log
 from scraping.manager import ScraperManager
+from scraping.filter import Filter
 from db.dbconnetion import MongoAPI
 from flask_cors import CORS
 import os
@@ -41,7 +42,9 @@ def scrape():
     keywords = data["keywords"]
     sc = ScraperManager(keywords)
     jobs = sc.main_scraping()
-    jobs_json = [job for job in jobs]
+    filtered_jobs = Filter(keywords).filter(jobs)
+    print(filtered_jobs)
+    jobs_json = [job for job in filtered_jobs]
 
     return Response(response = json.dumps({"success": True, "jobs": jobs_json})
         ,status=200,mimetype="application/json")
