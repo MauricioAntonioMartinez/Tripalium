@@ -10,9 +10,13 @@ class IndeedScrape(Scraper):
 
     def scrape_description(self, job):
         if not job["link"]:
-            return "Link not found"
-        return str(self.scrape(job["link"], {"id": "jobDescriptionText",
-                                             "class": "jobsearch-jobDescriptionText"}))
+            return None
+        data =  self.scrape(job["link"], {"id": "jobDescriptionText",
+                                             "class": "jobsearch-jobDescriptionText"})
+        if len(data) > 0:
+            return str(data[0])
+        
+        return None
 
     def scrape_jobs(self):
         for job in self.data:

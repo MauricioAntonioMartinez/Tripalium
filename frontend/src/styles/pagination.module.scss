@@ -1,0 +1,60 @@
+.paginationContainer {
+  padding: 2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  align-self: flex-start;
+}
+
+.limitPage {
+  width: 2rem;
+  text-align: center;
+  color: rgb(255, 255, 255);
+  background-color: rgb(0, 0, 0);
+  padding: 0.2rem;
+  border: 1px solid rgb(255, 255, 255);
+  padding: 0.4rem;
+  &:hover {
+    cursor: pointer;
+    background-color: black;
+    color: white;
+  }
+}
+
+.currentPage {
+  padding: 0.4rem;
+  color: black;
+  background-color: rgba(0, 0, 0, 0.363);
+  width: 2rem;
+  text-align: center;
+  border: 1px solid black;
+}
+
+.dotsContainer {
+  margin: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 2rem;
+  div {
+    background-color: rgba(0, 0, 0, 0.322);
+    border-radius: 25px;
+    height: 0.5rem;
+    width: 0.5rem;
+  }
+}
+
+.page {
+  text-align: center;
+  width: 2rem;
+  padding: 0.4rem;
+  border: 1px solid #ccc;
+  background-color: white;
+
+  &:hover {
+    cursor: pointer;
+    background-color: black;
+    color: white;
+  }
+}

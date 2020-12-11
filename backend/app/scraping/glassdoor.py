@@ -13,7 +13,9 @@ class GlassdorScrape(Scraper):
     def scrape_description(self, job):
         content = self.scrape(
             job["link"], {"id": "JobDescriptionContainer"}, "div")
-        return str(content)
+        if len(content) > 0:
+            return str(content[0])
+        return None
 
     def scrape_jobs(self):
         for job in self.data:

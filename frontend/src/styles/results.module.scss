@@ -1,12 +1,10 @@
 .results {
   flex: 1;
+
   grid-area: Results;
   width: 100%;
-  display: flex;
-  flex-direction: column;
   padding: 2rem;
   border-top: 1px solid #ccc;
-  align-items: flex-start;
 }
 
 .jobCard {
@@ -53,7 +51,7 @@
 .resultContainer {
   padding: 2rem;
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 0.1fr 2fr 1fr;
@@ -64,7 +62,17 @@
     "Results Results JobDetails JobDetails";
 }
 
-.JobDetails {
+.jobDetailsContainer {
   margin: 0.5rem;
+  padding: 3rem;
+  background-color: white;
   grid-area: JobDetails;
+  width: 100%;
+  height: 100vh;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.jobDetails {
+  margin-top: 1rem;
 }

@@ -22,11 +22,11 @@ class ScraperManager():
 
     def main_scraping(self):
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            # res_1 = executor.submit(self.indeed.scrape_jobs)
+            res_1 = executor.submit(self.indeed.scrape_jobs)
             res_2 = executor.submit(self.glassdoor.scrape_jobs)
             res_3 = executor.submit(self.career_builder.scrape_jobs)
 
-            return  res_2.result() + res_3.result()
+            return res_1.result() + res_2.result() + res_3.result()
 
 
 # if __name__ == "__main__":

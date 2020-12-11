@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import styleLoading from "../styles/loading.module.scss";
 import { Tags } from "../components/Tags";
 import { Search } from "../components/Search";
 import styles from "../styles/common.module.scss";
@@ -30,27 +29,31 @@ const index = ({ recent_searches }: Props) => {
     setLoading(false);
   };
 
+  let content = (
+    <>
+      <Tags tags={tags} remove={removeTagHandler} />
+      {tags.length >= 2 && !loading && (
+        <SearchButton onClick={searchHandler}>Give me luck</SearchButton>
+      )}
+      <RecentSearches
+        recent_searches={recent_searches}
+        shouldDisplay={
+          tags.length === 0 && recent_searches.length > 0 && !loading
+        }
+      />
+    </>
+  );
+  if (loading) content = <LoadingSearch cancel={cancelSearchHandler} />;
+  if (tags.length === 0 && recent_searches.length === 0 && !loading)
+    content = <h1>Add tags to look for jobs.</h1>;
+
   return (
     <div className={styles.container}>
       <div className={styles.container}>
         <h1 className={styles.branch}>Tripalium</h1>
         <Search addTagHandler={addTagHandler} disabled={loading} />
       </div>
-      <main className={layout.mainContent}>
-        <Tags tags={tags} remove={removeTagHandler} />
-        {tags.length >= 2 && !loading && (
-          <SearchButton onClick={searchHandler}>Give me luck</SearchButton>
-        )}
-        <LoadingSearch
-          cancel={cancelSearchHandler}
-          keywordsLength={tags.length + recent_searches.length}
-          loading={loading}
-        />
-        <RecentSearches
-          recent_searches={recent_searches}
-          shouldNotDisplay={tags.length === 0 && recent_searches.length === 0}
-        />
-      </main>
+      <main className={layout.mainContent}>{content}</main>
     </div>
   );
 };
@@ -58,7 +61,7 @@ const index = ({ recent_searches }: Props) => {
 index.getInitialProps = async (ctx: NextPageContext) => {
   const axios = buildClient(ctx.req);
   const res = await axios.get("http://flask:5000/", {
-    headers: ctx.req.headers,
+    headers: ctx?.req?.headers,
   });
   return {
     recent_searches: res.data?.recent_searches || [],

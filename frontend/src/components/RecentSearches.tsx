@@ -3,12 +3,12 @@ import styles from "../styles/common.module.scss";
 
 interface Props {
   recent_searches?: string[];
-  shouldNotDisplay:boolean;
+  shouldDisplay:boolean;
 }
 
-export const RecentSearches = ({shouldNotDisplay, recent_searches }: Props) => {
+export const RecentSearches = ({shouldDisplay, recent_searches }: Props) => {
 
-  if(shouldNotDisplay) return null;
+  if(!shouldDisplay) return null;
 
   return (
     <div className={styles.recent_searches}>

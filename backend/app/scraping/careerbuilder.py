@@ -12,8 +12,8 @@ class CareerBuilderScrepe(Scraper):
         job_desc = self.scrape(job["link"],
                                {"class": "data-display-container"})
         if len(job_desc) == 0:
-
             return None
+            
         desc = job_desc[0].find("p")
         req = job_desc[0].find(True, {"class": "bloc"})
         # or (tag.name == "div" and tag.get("class") == "bloc")]
