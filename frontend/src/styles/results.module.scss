@@ -41,6 +41,8 @@
 
 .resultSearcher {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   grid-area: header;
   margin-bottom: 0.5rem;
   h1 {

@@ -1,4 +1,4 @@
-from flask import Flask, request, json, Response, jsonify,session
+from flask import Flask, request, json, Response, jsonify, session
 from pymongo import MongoClient
 import logging as log
 from scraping.manager import ScraperManager
@@ -13,24 +13,27 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 db = MongoAPI()
 app.secret_key = "sdfgsdfg"
 
-@app.route('/',methods=['GET'])
+
+@app.route('/', methods=['GET'])
 def base():
     return Response(
-           response=json.dumps({"recent_searches":session.get("recent_searches")}),
-            status=200,
-            mimetype='application/json')
+        response=json.dumps(
+            {"recent_searches": session.get("recent_searches")}),
+        status=200,
+        mimetype='application/json')
 
 
-@app.route("/",methods=["POST"])
+@app.route("/", methods=["POST"])
 def get_cookies():
-    searches_data =  request.json
-    if "searches" not in searches_data: 
-        return Response({"message":"data not provided"},status=400)
+    searches_data = request.json
+    if "searches" not in searches_data:
+        return Response({"message": "data not provided"}, status=400)
     new_searches = [sr for sr in searches_data["searches"]]
     if not session.get("recent_searches"):
         session["recent_searches"] = []
-    session["recent_searches"] = session.get("recent_searches") +  new_searches  
-    return { "recent_searches": session.get("recent_searches") }
+    session["recent_searches"] = session.get("recent_searches") + new_searches
+    return {"recent_searches": session.get("recent_searches")}
+
 
 @app.route("/scrape", methods=["POST"])
 def scrape():
@@ -38,16 +41,15 @@ def scrape():
     if "keywords" not in data:
         return Response(
             response=json.dumps({"message": "No keywords provided"}),
-            status= 400)
+            status=400)
     keywords = data["keywords"]
     sc = ScraperManager(keywords)
     jobs = sc.main_scraping()
     filtered_jobs = Filter(keywords).filter(jobs)
-    print(filtered_jobs)
+
     jobs_json = [job for job in filtered_jobs]
 
-    return Response(response = json.dumps({"success": True, "jobs": jobs_json})
-        ,status=200,mimetype="application/json")
+    return Response(response=json.dumps({"success": True, "jobs": jobs_json}), status=200, mimetype="application/json")
 
 
 @app.route('/', methods=["POST"])
@@ -60,6 +62,7 @@ def middleware_for_response(response):
     # Allowing the credentials in the response.
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=PORT, host='0.0.0.0')

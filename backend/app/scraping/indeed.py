@@ -11,11 +11,11 @@ class IndeedScrape(Scraper):
     def scrape_description(self, job):
         if not job["link"]:
             return None
-        data =  self.scrape(job["link"], {"id": "jobDescriptionText",
-                                             "class": "jobsearch-jobDescriptionText"})
+        data = self.scrape(job["link"], {"id": "jobDescriptionText",
+                                         "class": "jobsearch-jobDescriptionText"})
         if len(data) > 0:
             return str(data[0])
-        
+
         return None
 
     def scrape_jobs(self):
@@ -56,4 +56,3 @@ if __name__ == '__main__':
     country = "mx"
     url = f"https://www.indeed.{country}/jobs?q={query}"
     jobs = IndeedScrape(url).scrape_jobs()
-    print(jobs)

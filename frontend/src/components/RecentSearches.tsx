@@ -15,7 +15,7 @@ export const RecentSearches = ({shouldDisplay, recent_searches }: Props) => {
       <h1>Recent Searches</h1>
       <ul>
         {recent_searches?.map((search, i) => {
-          return <li key={i}>{search} <span>></span> </li>;
+          return <li key={i}>{search} <span>`{'>'}`</span> </li>;
         })}
       </ul>
     </div>
