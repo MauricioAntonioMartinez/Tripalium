@@ -45,18 +45,16 @@ const Results = (props: Props) => {
   const searchHandler = async () => {
     setLoading(true);
     try {
-      const res = await axios.post(
-        `${__server__.replace("flask", "localhost")}/scrape`,
-        {
-          keywords: tags,
-        }
-      );
+      const res = await axios.post(`http://localhost:5000/scrape`, {
+        keywords: tags,
+      });
       setJobs(res?.data?.jobs);
       setJobSelected(null);
+      setLoading(false);
     } catch (e) {
+      setLoading(false);
       console.log(e.message);
     } finally {
-      setLoading(false);
     }
 
     // router.push(`/results?keywords=${tags.join("+")}`, "/results");
@@ -97,8 +95,8 @@ const Results = (props: Props) => {
         </div>
         <div className={styles.results}>
           <div>
-            {props?.jobs
-              ?.slice(jobBoundaries.start, jobBoundaries.end)
+            {jobs
+              .slice(jobBoundaries.start, jobBoundaries.end)
               .map((job, i) => {
                 return (
                   <JobCard

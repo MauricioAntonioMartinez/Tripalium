@@ -1,8 +1,10 @@
-from urllib.request import urlopen, Request
-from bs4 import BeautifulSoup
-from .util import Util
-import concurrent.futures
 import abc
+import concurrent.futures
+from urllib.request import Request, urlopen
+
+from bs4 import BeautifulSoup
+
+from .util import Util
 
 
 class Scraper(metaclass=abc.ABCMeta):
@@ -50,6 +52,7 @@ class Scraper(metaclass=abc.ABCMeta):
             bs = BeautifulSoup(html, 'html.parser')
             return bs.find_all(True if type(tag) == bool else tag, args)
         except Exception as e:
+            print(url)
             print("REQUEST FAILED")
             print(e)
             return []
