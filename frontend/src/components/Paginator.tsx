@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-import { idText } from "typescript";
+import React, { useRef, useState } from "react";
 import styles from "../styles/pagination.module.scss";
 
 interface Props {
@@ -22,7 +21,7 @@ export const Paginator = React.memo(
 
     return (
       <div className={styles.paginationContainer}>
-        {currentPage - 3 >= 1 && (
+        {currentPage - 3 > 1 && (
           <>
             <div
               className={styles.limitPage}
@@ -48,7 +47,7 @@ export const Paginator = React.memo(
           direction="right"
         />
 
-        {currentPage + 4 <= totalPages.current && (
+        {currentPage + 3 < totalPages.current && (
           <>
             <Dots />
             <div
@@ -88,7 +87,7 @@ const Siblings = ({
   totalPages: number;
   onClick: (page: number) => void;
 }) => {
-  const pages = Array.from(new Array(4)).map((_, index) => {
+  const pages = Array.from(new Array(3)).map((_, index) => {
     const displayPage =
       currentPage + (index + 1) * (direction === "left" ? -1 : 1);
 

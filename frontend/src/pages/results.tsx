@@ -1,3 +1,4 @@
+import axios from "axios";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React, { useCallback, useState } from "react";
@@ -29,21 +30,36 @@ interface Props {
 
 const Results = (props: Props) => {
   const router = useRouter();
+  const [jobs, setJobs] = useState(props.jobs);
   const [jobSelected, setJobSelected] = useState<JobDescription | null>();
   const [jobBoundaries, setJobBoundaries] = useState({ start: 0, end: 10 });
   const { addTagHandler, removeTagHandler, tags } = useTags();
   const [loading, setLoading] = useState(false);
 
   const showDetailsHandler = (idx: number) => {
-    const hasContent = props.jobs[idx]?.content;
+    const hasContent = jobs[idx]?.content;
     if (hasContent) {
-      console.log(hasContent);
       setJobSelected(props?.jobs[idx]);
     }
   };
   const searchHandler = async () => {
     setLoading(true);
-    router.replace(`/results?keywords=${tags.join("+")}`, "/results");
+    try {
+      const res = await axios.post(
+        `${__server__.replace("flask", "localhost")}/scrape`,
+        {
+          keywords: tags,
+        }
+      );
+      setJobs(res?.data?.jobs);
+      setJobSelected(null);
+    } catch (e) {
+      console.log(e.message);
+    } finally {
+      setLoading(false);
+    }
+
+    // router.push(`/results?keywords=${tags.join("+")}`, "/results");
   };
 
   const changeJobsHandler = useCallback(
@@ -73,9 +89,11 @@ const Results = (props: Props) => {
                 Give me luck
               </SearchButton>
             )}
+            {loading && (
+              <LoadingSearch minimal cancel={() => setLoading(!loading)} />
+            )}
           </div>
-          <Tags tags={tags} remove={removeTagHandler} />
-          {/* {loading && <LoadingSearch  cancel={(d)=>{}}/>} */}
+          {!loading && <Tags tags={tags} remove={removeTagHandler} />}
         </div>
         <div className={styles.results}>
           <div>
@@ -94,11 +112,8 @@ const Results = (props: Props) => {
         </div>
         {jobSelected && <JobDetails jobSelected={jobSelected} />}
       </div>
-      {props.jobs?.length > 9 && (
-        <Paginator
-          changePages={changeJobsHandler}
-          totalJobs={props.jobs.length}
-        />
+      {jobs?.length > 9 && (
+        <Paginator changePages={changeJobsHandler} totalJobs={jobs.length} />
       )}
     </div>
   );

@@ -12,8 +12,8 @@ class Filter():
 
         for job in data:
 
-            if not job["content"]:
-                continue
+            # if not job["content"]:
+            #     continue
 
             are_in_title = any(bool(i)
                                for i in self.keywords if i in job["title"].lower())

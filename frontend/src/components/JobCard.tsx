@@ -13,7 +13,7 @@ export const JobCard = ({ onClick, job }: Props) => {
       <h2>{job?.title}</h2>
       <p>Enterprise: {job?.enterprise}</p>
       <p>location: {job?.location}</p>
-      <span>Salary: {job?.salary}</span>
+      {job?.salary && <span>Salary: {job?.salary}</span>}
       {/* <span>More details: <a href={job.}></a> </span> */}
     </div>
   );

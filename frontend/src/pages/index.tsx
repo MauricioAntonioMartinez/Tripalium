@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { Tags } from "../components/Tags";
+import { NextPageContext } from "next";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import { buildClient } from "../api/client";
+import { LoadingSearch } from "../components/LoadingSearch";
+import { RecentSearches } from "../components/RecentSearches";
 import { Search } from "../components/Search";
+import { SearchButton } from "../components/SearchButton";
+import { Tags } from "../components/Tags";
+import { __server__ } from "../constants/constants";
+import { useTags } from "../hook/useTags";
 import styles from "../styles/common.module.scss";
 import layout from "../styles/layout.module.scss";
-import { useRouter } from "next/router";
-import { SearchButton } from "../components/SearchButton";
-import { NextPageContext } from "next";
-import { buildClient } from "../api/client";
-import { RecentSearches } from "../components/RecentSearches";
-import { LoadingSearch } from "../components/LoadingSearch";
-import { useTags } from "../hook/useTags";
-import { __server__ } from "../constants/constants";
 interface Props {
   recent_searches: string[];
 }
@@ -21,6 +21,7 @@ const index = ({ recent_searches }: Props) => {
   const { addTagHandler, removeTagHandler, tags } = useTags();
   const searchHandler = async () => {
     setLoading(true);
+
     router.replace(`/results?keywords=${tags.join("+")}`, "/results");
   };
   const cancelSearchHandler = () => {
@@ -66,7 +67,6 @@ index.getInitialProps = async (ctx: NextPageContext) => {
       recent_searches: res?.data?.recent_searches || [],
     };
   } catch (e) {
-    console.log(e);
     return { recent_searches: [] };
   }
 };

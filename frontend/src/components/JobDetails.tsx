@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const JobDetails = ({ jobSelected }: Props) => {
-  console.log(jobSelected);
+  console.log(jobSelected.salary);
   return (
     <div className={styles.jobDetailsContainer}>
       <h1>{jobSelected?.title}</h1>
@@ -17,7 +17,7 @@ export const JobDetails = ({ jobSelected }: Props) => {
           {jobSelected?.urgent && <span>- Urgent</span>}
         </h3>
       </div>
-      {jobSelected?.salary && (
+      {jobSelected.salary && (
         <h4>
           <strong>{jobSelected?.salary}</strong>
         </h4>
