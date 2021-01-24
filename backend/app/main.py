@@ -1,11 +1,15 @@
-from flask import Flask, request, json, Response, jsonify, session
-from pymongo import MongoClient
+import json
 import logging as log
-from scraping.manager import ScraperManager
-from scraping.filter import Filter
-from db.dbconnetion import MongoAPI
-from flask_cors import CORS
 import os
+
+from flask import Flask, Response, jsonify, request, session
+from flask_cors import CORS
+from pymongo import MongoClient
+
+from db.dbconnetion import MongoAPI
+from scraping.encoder import JSONEncoder
+from scraping.filter import Filter
+from scraping.manager import ScraperManager
 
 PORT = os.environ.get("PORT")
 app = Flask(__name__)
@@ -35,6 +39,7 @@ def get_cookies():
     return {"recent_searches": session.get("recent_searches")}
 
 
+
 @app.route("/scrape", methods=["POST"])
 def scrape():
     data = request.json
@@ -43,13 +48,23 @@ def scrape():
             response=json.dumps({"message": "No keywords provided"}),
             status=400)
     keywords = data["keywords"]
-    sc = ScraperManager(keywords)
-    jobs = sc.main_scraping()
-    filtered_jobs = Filter(keywords).filter(jobs)
 
+    if db.read_keywords(keywords):
+        jobs = db.read_jobs(keywords)
+        return Response(response=JSONEncoder().encode({"success":True,
+        "fromCache":True,"jobs":jobs}))
+
+    sc = ScraperManager(keywords)
+    jobs = sc.main_scraping() 
+    filtered_jobs = Filter(keywords).filter(jobs)
+    if len(filtered_jobs) > 0:
+        db.write_many([{"keywords":keywords}],"key_words")
+        db.write_many(filtered_jobs,"job")
     jobs_json = [job for job in filtered_jobs]
 
-    return Response(response=json.dumps({"success": True, "jobs": jobs_json}), status=200, mimetype="application/json")
+    return Response(response=JSONEncoder().encode({"success": True
+    ,"fromCache":False, "jobs": filtered_jobs}), status=200, mimetype="application/json")
+
 
 
 @app.route('/', methods=["POST"])

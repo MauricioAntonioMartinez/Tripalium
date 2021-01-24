@@ -19,6 +19,6 @@ class Filter():
                                for i in self.keywords if i in job["title"].lower())
 
             if are_in_title:
-                filtered_jobs.append(job)
+                filtered_jobs.append({**job,"keywords":self.keywords})
 
         return filtered_jobs

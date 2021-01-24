@@ -6,5 +6,7 @@ export const useTags = () => {
   const removeTagHandler = (index: number) =>
     setTags((tags) => tags.filter((_, idx) => idx !== index));
 
-  return { tags, addTagHandler, removeTagHandler };
+  const resetTags = () => setTags([]);
+
+  return { tags, addTagHandler, removeTagHandler, resetTags };
 };

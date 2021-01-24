@@ -33,7 +33,7 @@ const Results = (props: Props) => {
   const [jobs, setJobs] = useState(props.jobs);
   const [jobSelected, setJobSelected] = useState<JobDescription | null>();
   const [jobBoundaries, setJobBoundaries] = useState({ start: 0, end: 10 });
-  const { addTagHandler, removeTagHandler, tags } = useTags();
+  const { addTagHandler, removeTagHandler, tags, resetTags } = useTags();
   const [loading, setLoading] = useState(false);
 
   const showDetailsHandler = (idx: number) => {
@@ -51,6 +51,7 @@ const Results = (props: Props) => {
       setJobs(res?.data?.jobs);
       setJobSelected(null);
       setLoading(false);
+      resetTags();
     } catch (e) {
       setLoading(false);
       console.log(e.message);
@@ -129,13 +130,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       headers: ctx.req.headers,
     });
 
+    console.log(res.data?.fromCache);
+
     return {
       props: {
-        jobs: res?.data?.jobs,
+        jobs: res?.data?.jobs || [],
       },
     };
   } catch (e) {
-    console.log(e);
+    console.log(e.message);
     return {
       props: {},
     };

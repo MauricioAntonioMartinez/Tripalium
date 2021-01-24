@@ -5,6 +5,8 @@ services:
     image: mongo
     volumes:
       - mongo-scrape-data:/data/db
+    ports:
+      - "6666:27017"
     env_file:
       - ./env/.database.env
   flask:
