@@ -43,24 +43,30 @@ def get_cookies():
 @app.route("/scrape", methods=["POST"])
 def scrape():
     data = request.json
+
     if "keywords" not in data:
         return Response(
             response=json.dumps({"message": "No keywords provided"}),
             status=400)
     keywords = data["keywords"]
 
-    if db.read_keywords(keywords):
-        jobs = db.read_jobs(keywords)
-        return Response(response=JSONEncoder().encode({"success":True,
-        "fromCache":True,"jobs":jobs}))
+    print("Processing keywords: ",keywords)
+ 
+    # if db.read_keywords(keywords):
+    #     jobs = db.read_jobs(keywords) 
+    #     return Response(response=JSONEncoder().encode({"success":True,
+    #     "fromCache":True,"jobs":jobs}))
 
     sc = ScraperManager(keywords)
-    jobs = sc.main_scraping() 
+    jobs = sc.main_scraping()
+    
     filtered_jobs = Filter(keywords).filter(jobs)
+    print("Jobs Scraped: ",len(jobs))
+    print("Jobs Scraped Fileter: ",len(filtered_jobs))
+
     if len(filtered_jobs) > 0:
         db.write_many([{"keywords":keywords}],"key_words")
-        db.write_many(filtered_jobs,"job")
-    jobs_json = [job for job in filtered_jobs]
+        # db.write_many(filtered_jobs,"job")
 
     return Response(response=JSONEncoder().encode({"success": True
     ,"fromCache":False, "jobs": filtered_jobs}), status=200, mimetype="application/json")

@@ -101,13 +101,14 @@ const Results = (props: Props) => {
               .map((job, i) => {
                 return (
                   <JobCard
-                    key={i}
+                    key={i+tags.join()}
                     job={job}
                     onClick={() => showDetailsHandler(jobBoundaries.start + i)}
                   />
                 );
               })}
-          </div>
+              {jobs.length === 0  &&  <div className={styles.notFound}>We couldn't find any results sorry. Please try something else. 🥺</div>}        
+            </div>
         </div>
         {jobSelected && <JobDetails jobSelected={jobSelected} />}
       </div>

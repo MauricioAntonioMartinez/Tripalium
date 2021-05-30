@@ -1,8 +1,10 @@
-from urllib.request import urlopen, Request
-from bs4 import BeautifulSoup
-from .util import Util
-from .scraper import Scraper
 import concurrent.futures
+from urllib.request import Request, urlopen
+
+from bs4 import BeautifulSoup
+
+from .scraper import Scraper
+from .util import Util
 
 
 class GlassdorScrape(Scraper):
@@ -15,25 +17,28 @@ class GlassdorScrape(Scraper):
             job["link"], {"id": "JobDescriptionContainer"}, "div")
         if len(content) > 0:
             return str(content[0])
-        return None
-
+        return None 
+ 
     def scrape_jobs(self):
         for job in self.data:
-            enterprise = Util.get_att(job.find(
-                True, {"class": "jobHeader"}).find("span"), "text")
-            title = job.find(True, {"class": "jobTitle"})
-            location = Util.get_att(job.find(True, {"class": "loc"}), "text")
-            url = self.DOMAIN + title["href"]
-            urgent = job.find(True, {"class": "hotListing"})
-            urgent = True if urgent and urgent.text == "Alta demanda" else False
-            job_description = {
-                "title": title.text,
-                "enterprise": enterprise,
-                "link": url,
-                "location": location,
-                "urgent": urgent,
-            }
-            self.jobs.append(job_description)
+            print(job) 
+
+            if job:
+                enterprise = Util.get_att(job.find(
+                    True, {"class": "jobHeader"}).find("span"), "text")
+                title = job.find(True, {"class": "jobTitle"})
+                location = Util.get_att(job.find(True, {"class": "loc"}), "text")
+                url = self.DOMAIN + title["href"]
+                urgent = job.find(True, {"class": "hotListing"})
+                urgent = True if urgent and urgent.text == "Alta demanda" else False
+                job_description = {
+                    "title": title.text,
+                    "enterprise": enterprise,
+                    "link": url,
+                    "location": location,
+                    "urgent": urgent,
+                }
+                self.jobs.append(job_description)
 
         self.scrape_jobs_descriptions()
         return self.jobs

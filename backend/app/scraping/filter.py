@@ -6,19 +6,14 @@ class Filter():
         self.keywords = keywords
 
     def filter(self, data):
-        filtered_jobs = []
-        if not data:
-            return filtered_jobs
+        return  sorted(data,key= lambda x:
+        sum([self.count_keyword(x,"content",k)*0.5 +self.count_keyword(x,"title",k)*2 +self.count_keyword(x,"summary",k)
+             for k in self.keywords])
+        ,reverse=True)
 
-        for job in data:
 
-            # if not job["content"]:
-            #     continue
-
-            are_in_title = any(bool(i)
-                               for i in self.keywords if i in job["title"].lower())
-
-            if are_in_title:
-                filtered_jobs.append({**job,"keywords":self.keywords})
-
-        return filtered_jobs
+    def count_keyword(self,v,att,kw):
+        try:
+            return v[att].lower().count(kw.lower()) 
+        except:
+            return 0

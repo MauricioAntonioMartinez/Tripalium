@@ -20,3 +20,7 @@ class Util:
             return [float(s.replace("$", "").replace("\n", "").replace(",", "")) for s in slr.split(" ") if "$" in s]
         else:
             return None
+
+    @classmethod
+    def safe_find():
+        pass

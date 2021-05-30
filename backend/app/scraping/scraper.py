@@ -17,6 +17,7 @@ class Scraper(metaclass=abc.ABCMeta):
     def __init__(self, url):
         if not url:
             raise Exception("Missing scraping url.")
+        print(f"Scrapping url: {url}")
         data = self.scrape(
             url, self.args_scraper)
         self.data = data
@@ -52,7 +53,6 @@ class Scraper(metaclass=abc.ABCMeta):
             bs = BeautifulSoup(html, 'html.parser')
             return bs.find_all(True if type(tag) == bool else tag, args)
         except Exception as e:
-            print(url)
             print("REQUEST FAILED")
             print(e)
             return []
