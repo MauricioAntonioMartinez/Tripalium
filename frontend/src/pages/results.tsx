@@ -97,7 +97,7 @@ const Results = (props: Props) => {
         <div className={styles.results}>
           <div>
             {jobs
-              .slice(jobBoundaries.start, jobBoundaries.end)
+              ?.slice(jobBoundaries.start, jobBoundaries.end)
               .map((job, i) => {
                 return (
                   <JobCard
@@ -126,6 +126,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
   const axios = buildClient(ctx.req);
   try {
+    console.log(__server__)
     const res = await axios.post(`${__server__}/scrape`, {
       keywords,
       headers: ctx.req.headers,

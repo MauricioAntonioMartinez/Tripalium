@@ -9,6 +9,8 @@ services:
       - "6666:27017"
     env_file:
       - ./env/.database.env
+    logging:
+      driver: none
   flask:
     build: ./backend
     env_file:
@@ -22,9 +24,11 @@ services:
   next:
     build: ./frontend
     volumes:
-      - ./frontend:/app
+      - ./frontend/src:/app/src
     ports:
       - "3000:3000"
+    environment:
+      SERVER: http://flask:5000/
     depends_on:
       - flask
 

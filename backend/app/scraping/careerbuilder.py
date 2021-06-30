@@ -1,6 +1,8 @@
 
-from .util import Util
+from os import confstr
+
 from .scraper import Scraper
+from .util import Util
 
 
 class CareerBuilderScrepe(Scraper):
@@ -21,6 +23,10 @@ class CareerBuilderScrepe(Scraper):
 
     def scrape_jobs(self):
         for job in self.data:
+
+            if job is None:
+                continue
+
             link = job.find(True, {"class": "job-listing-item"})["href"]
             url = self.DOMAIN+link
             title = Util.get_att(
